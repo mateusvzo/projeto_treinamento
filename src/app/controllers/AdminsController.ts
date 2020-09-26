@@ -1,4 +1,4 @@
-import { Admin, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 import Admins from '../models/Admins';
 
@@ -8,7 +8,7 @@ interface Request {
 }
 
 class AdminsController {
-    public async store({ matricula, password }: Request): Promise<Request> {
+    public async store({ matricula, password }: Request): Promise<Admins> {
         const adminsRepository = getRepository(Admins);
 
         const adminsExist = await adminsRepository.find();

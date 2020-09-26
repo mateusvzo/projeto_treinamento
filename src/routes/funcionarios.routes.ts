@@ -2,8 +2,10 @@ import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import FuncionariosController from '../app/controllers/FuncionariosController';
 import Funcionarios from '../app/models/Funcionarios';
+import ensureAuthenticated from '../middleawares/ensureAuthenticated';
 
 const funcionarioRouter = Router();
+funcionarioRouter.use(ensureAuthenticated);
 
 funcionarioRouter.post('/', async (request, response) => {
     try {
@@ -24,7 +26,7 @@ funcionarioRouter.post('/', async (request, response) => {
 funcionarioRouter.get('/', async (request, response) => {
     const funcionariosRepository = getRepository(Funcionarios);
     const user = await funcionariosRepository.find();
-    console.log(user);
+
     return response.json(user);
 });
 

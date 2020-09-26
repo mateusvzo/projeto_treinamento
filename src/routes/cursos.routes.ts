@@ -2,8 +2,10 @@ import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import CursosController from '../app/controllers/CursosController';
 import Cursos from '../app/models/Cursos';
+import ensureAuthenticated from '../middleawares/ensureAuthenticated';
 
 const cursosRouter = Router();
+cursosRouter.use(ensureAuthenticated);
 
 cursosRouter.post('/', async (request, response) => {
     try {
