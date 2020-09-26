@@ -49,7 +49,6 @@ cursosRouter.put('/:id', async (request, response) => {
     const { nome, carga_horaria_curso } = request.body;
 
     const curso = await cursosRepository.findOne(id);
-    console.log(curso);
 
     if (!curso) {
         throw new Error('Curso Inexistente');
