@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
+import ListarController from '../app/controllers/ListarController';
 import TreinamentosController from '../app/controllers/TreinamentosController';
 import Treinamentos from '../app/models/Treinamentos';
 import ensureAuthenticated from '../middleawares/ensureAuthenticated';
@@ -62,4 +63,15 @@ treinamentosRouter.delete('/:id', async (request, response) => {
 
     return response.send();
 });
+
+treinamentosRouter.get('/listar/:id', async (request, response) => {
+    const listarRepository = new ListarController();
+    const { id } = request.params;
+    const treinamento = await listarRepository.show({
+        id,
+    });
+
+    return response.json(treinamento);
+});
+
 export default treinamentosRouter;

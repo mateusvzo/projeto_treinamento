@@ -1,10 +1,15 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
+import multer from 'multer';
+
 import FuncionariosController from '../app/controllers/FuncionariosController';
 import Funcionarios from '../app/models/Funcionarios';
+import AvatarController from '../app/controllers/AvatarController';
 import ensureAuthenticated from '../middleawares/ensureAuthenticated';
+import uploadConfig from '../config/upload';
 
 const funcionarioRouter = Router();
+const upload = multer(uploadConfig);
 funcionarioRouter.use(ensureAuthenticated);
 
 funcionarioRouter.post('/', async (request, response) => {
@@ -62,5 +67,23 @@ funcionarioRouter.put('/:id', async (request, response) => {
     await funcionariosRepository.save(func);
     return response.json(func);
 });
+
+funcionarioRouter.patch(
+    '/avatar/:id',
+    upload.single('avatar'),
+    async (request, response) => {
+        try {
+            const avatarFuncionariosController = new AvatarController();
+            const { id } = request.params;
+            const func = await avatarFuncionariosController.update({
+                id,
+                avatar: request.file.filename,
+            });
+            return response.json(func);
+        } catch (erro) {
+            return response.status(400).json({ erro: erro.message });
+        }
+    },
+);
 
 export default funcionarioRouter;
